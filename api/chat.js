@@ -177,12 +177,20 @@ module.exports = async (req, res) => {
     .join("\n")
     .slice(0, 4000);
 
+  // Só habilita as ferramentas quando a conversa tem um contato (telefone com
+  // 10+ dígitos ou e-mail). Evita que o modelo "sequestre" saudações/perguntas
+  // gerais tentando registrar contato.
+  const blobUser = messages.filter((m) => m.role === "user").map((m) => m.content).join(" ");
+  const temTelefone = ((blobUser.match(/\d/g) || []).length >= 10);
+  const temEmail = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(blobUser);
+  const usarTools = temTelefone || temEmail;
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 58000);
   try {
-    // UMA chamada ao modelo. Se ele dispara a ferramenta, gravamos no CRM e
+    // Uma chamada ao modelo. Se ele dispara a ferramenta, gravamos no CRM e
     // devolvemos uma confirmação pronta (sem 2ª ida ao modelo — muito mais rápido).
-    const resp = await nvidiaChat(convo, true, controller.signal);
+    const resp = await nvidiaChat(convo, usarTools, controller.signal);
     const msg = resp.choices?.[0]?.message || {};
 
     if (Array.isArray(msg.tool_calls) && msg.tool_calls.length) {
