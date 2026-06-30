@@ -24,9 +24,6 @@ export default function ChatWidget() {
   const [registered, setRegistered] = useState(false);
   const bodyRef = useRef(null);
 
-  // Sem URL do assistente configurada, o widget não aparece (só WhatsApp).
-  if (!chatApiUrl) return null;
-
   useEffect(() => {
     try {
       const v = JSON.parse(localStorage.getItem(STORE_KEY));

@@ -1,20 +1,7 @@
-// Função serverless do Vercel — recebe e persiste leads no Firestore (Firebase).
-//
-// Requer a variável de ambiente FIREBASE_SERVICE_ACCOUNT no Vercel, contendo
-// o JSON completo da service account do projeto Firebase.
+// Função serverless do Vercel — recebe o formulário de contato do site e grava
+// no Firestore no schema do CRM. Requer FIREBASE_SERVICE_ACCOUNT no Vercel.
 
-const { saveLead, getLeads } = require("../lib/firebaseAdmin.cjs");
-
-function montarLead({ nome, telefone, objetivo, mensagem }) {
-  return {
-    id: `${Date.now().toString(36)}-${Math.floor(performance.now()).toString(36)}`,
-    nome: String(nome).trim().slice(0, 120),
-    telefone: String(telefone).trim().slice(0, 40),
-    objetivo: objetivo ? String(objetivo).trim().slice(0, 120) : "",
-    mensagem: mensagem ? String(mensagem).trim().slice(0, 1000) : "",
-    criadoEm: new Date().toISOString(),
-  };
-}
+const { saveLead, getLeads, validarContato } = require("../lib/firebaseAdmin.cjs");
 
 module.exports = async (req, res) => {
   // Listagem simples (protegida por ADMIN_TOKEN, se configurado)
@@ -36,13 +23,22 @@ module.exports = async (req, res) => {
     return res.status(405).json({ ok: false, error: "Método não permitido." });
   }
 
-  const { nome, telefone } = req.body || {};
-  if (!nome || !telefone) {
-    return res.status(400).json({ ok: false, error: "Nome e telefone são obrigatórios." });
-  }
+  const { nome, telefone, objetivo, mensagem } = req.body || {};
+  const contato = String(telefone || "").trim();
+  const erro = validarContato(nome, contato);
+  if (erro) return res.status(400).json({ ok: false, error: erro });
 
+  const isEmail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(contato);
   try {
-    const lead = await saveLead(montarLead(req.body));
+    const lead = await saveLead({
+      nome,
+      contato,
+      email: isEmail ? contato : null,
+      whatsapp: isEmail ? null : contato,
+      objetivo: String(objetivo || "").trim() || "",
+      mensagem: String(mensagem || "").trim() || null,
+      origem: "form",
+    });
     return res.status(201).json({ ok: true, lead });
   } catch (err) {
     console.error("Erro ao salvar lead no Firestore:", err);
