@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-import { auth, googleProvider } from "../firebase.js";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase.js";
 import {
   isAllowed,
   getLeads,
@@ -51,6 +51,9 @@ export default function Crm() {
   const [user, setUser] = useState(undefined); // undefined = carregando
   const [allowed, setAllowed] = useState(null);
   const [erroLogin, setErroLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [entrando, setEntrando] = useState(false);
 
   useEffect(() => {
     return onAuthStateChanged(auth, async (u) => {
@@ -67,12 +70,27 @@ export default function Crm() {
     });
   }, []);
 
-  async function entrar() {
+  async function entrar(e) {
+    e?.preventDefault();
     setErroLogin("");
+    if (!email.trim() || !senha) {
+      setErroLogin("Informe e-mail e senha.");
+      return;
+    }
+    setEntrando(true);
     try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (e) {
-      setErroLogin(e.message || "Falha no login.");
+      await signInWithEmailAndPassword(auth, email.trim(), senha);
+    } catch (err) {
+      const code = err?.code || "";
+      const msg =
+        code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found"
+          ? "E-mail ou senha incorretos."
+          : code === "auth/too-many-requests"
+            ? "Muitas tentativas. Aguarde um momento e tente de novo."
+            : err.message || "Falha no login.";
+      setErroLogin(msg);
+    } finally {
+      setEntrando(false);
     }
   }
 
@@ -87,15 +105,33 @@ export default function Crm() {
   if (!user) {
     return (
       <div className="crm-shell crm-center">
-        <div className="crm-login">
+        <form className="crm-login" onSubmit={entrar}>
           <div className="crm-login-mark">BB</div>
           <h1>CRM · Beatriz Batista</h1>
-          <p>Acesso restrito à equipe. Entre com sua conta Google autorizada.</p>
-          <button className="btn" onClick={entrar}>
-            Entrar com Google
+          <p>Acesso restrito à equipe. Entre com seu e-mail e senha.</p>
+          <div className="crm-login-fields">
+            <input
+              type="email"
+              placeholder="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="username"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+          <button className="btn" type="submit" disabled={entrando} style={{ width: "100%" }}>
+            {entrando ? "Entrando..." : "Entrar"}
           </button>
           {erroLogin && <p className="crm-err">{erroLogin}</p>}
-        </div>
+        </form>
       </div>
     );
   }

@@ -423,3 +423,26 @@
 .crm-del:hover {
   background: #d93638;
 }
+
+/* LOGIN — campos e-mail/senha */
+.crm-login-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.crm-login-fields input {
+  width: 100%;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--bg);
+}
+.crm-login-fields input:focus {
+  outline: none;
+  border-color: var(--verde);
+  background: #fff;
+}
