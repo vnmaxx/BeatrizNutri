@@ -4,22 +4,22 @@ const passos = [
   {
     n: 1,
     titulo: "Primeiro contato",
-    texto: "Você chama no WhatsApp e conta seu objetivo. Eu tiro suas dúvidas e agendamos.",
+    texto: "Você chama no WhatsApp e conta seu objetivo. A Beatriz tira suas dúvidas e agenda.",
   },
   {
     n: 2,
     titulo: "Avaliação completa",
-    texto: "Conversa detalhada sobre rotina, histórico, exames e preferências alimentares.",
+    texto: "Anamnese detalhada, bioimpedância, histórico, exames e preferências alimentares.",
   },
   {
     n: 3,
-    titulo: "Seu plano personalizado",
-    texto: "Você recebe um plano feito pra você — flexível, prático e possível de seguir.",
+    titulo: "Seu plano individualizado",
+    texto: "Você recebe um plano feito para o seu corpo e a sua rotina — flexível e possível.",
   },
   {
     n: 4,
-    titulo: "Acompanhamento",
-    texto: "Retornos para ajustar, comemorar resultados e manter você no caminho certo.",
+    titulo: "Acompanhamento de 12 semanas",
+    texto: "Retornos e suporte no WhatsApp para ajustar, evoluir e manter os resultados.",
   },
 ];
 

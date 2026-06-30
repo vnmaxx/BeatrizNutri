@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "./Icon.jsx";
 import { chatApiUrl, chatAppToken, whatsappLink } from "../config.js";
 
 const WELCOME =
@@ -122,7 +123,7 @@ export default function ChatWidget() {
               aria-label="Mensagem"
             />
             <button type="submit" disabled={sending} aria-label="Enviar">
-              ➤
+              <Icon name="arrow" size={18} />
             </button>
           </form>
           <a className="biachat-walink" href={whatsappLink()} target="_blank" rel="noopener">
@@ -132,7 +133,7 @@ export default function ChatWidget() {
       )}
       {!open && (
         <button className="biachat-launch" onClick={() => setOpen(true)} aria-label="Falar com a assistente">
-          💬 Tirar dúvidas
+          <Icon name="spark" size={18} /> Tirar dúvidas
         </button>
       )}
     </div>

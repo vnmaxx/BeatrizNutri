@@ -2,44 +2,42 @@ import { site, whatsappLink } from "../config.js";
 
 export default function Sobre() {
   return (
-    <section className="section sobre">
+    <section className="section sobre" id="sobre">
       <div className="container sobre-grid">
-        <div className="sobre-img">
-          [TROCAR: foto da Beatriz no consultório ou atendendo — formato quadrado]
-        </div>
+        <div className="sobre-img">[Foto da Beatriz no consultório — formato quadrado]</div>
         <div>
           <span className="eyebrow">Quem vai te atender</span>
-          <h2>Olá, eu sou a Beatriz Batista</h2>
+          <h2>Beatriz Batista, nutricionista clínica e esportiva</h2>
           <p>
-            Sou nutricionista e atendo em São Paulo e online desde 2017. Nesse tempo, já realizei
-            mais de 3.000 consultas ajudando pessoas a emagrecer, melhorar a saúde e se reconciliar
-            com a comida — sem dietas impossíveis de manter.
+            Pós-graduada em Endocrinologia, Metabologia e Nutrição Clínica Funcional, a Beatriz já
+            realizou mais de 3.000 atendimentos. Seu trabalho une base científica e olhar individual
+            para cada paciente — nada de cardápio genérico ou dieta impossível de manter.
           </p>
           <p>
-            Acredito em um trabalho próximo, humano e individual: nada de cardápio genérico. Cada
-            plano nasce da sua rotina, do seu paladar e do seu objetivo, para que o resultado venha
-            e, principalmente, se mantenha.
+            O foco é entender o seu metabolismo, seus hormônios e a sua rotina para construir um
+            plano que traga resultado e, principalmente, se mantenha. Atende em Moema e na Avenida
+            Paulista, em São Paulo, e online para todo o Brasil.
           </p>
           <div className="stats">
             <div>
               <b>3.000+</b>
-              <span>consultas realizadas</span>
+              <span>atendimentos realizados</span>
             </div>
             <div>
-              <b>2017</b>
-              <span>atuando na área</span>
+              <b>Pós</b>
+              <span>Endocrinologia e Metabologia</span>
             </div>
             <div>
               <b>SP</b>
-              <span>+ online no Brasil todo</span>
+              <span>Moema, Paulista e online</span>
             </div>
           </div>
           <a className="btn" href={whatsappLink()} target="_blank" rel="noopener">
-            Agendar minha consulta
+            Agendar minha avaliação
           </a>
-          <p style={{ marginTop: "14px", fontSize: ".85rem", color: "var(--cinza)" }}>
-            CRN {site.crn} · [TROCAR: pós-graduações / especializações reais]
-          </p>
+          {site.crn && (
+            <p style={{ marginTop: "14px", fontSize: ".85rem", color: "var(--cinza)" }}>{site.crn}</p>
+          )}
         </div>
       </div>
     </section>

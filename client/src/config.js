@@ -1,23 +1,26 @@
 // Dados de contato da profissional — ajuste aqui em um único lugar.
 export const site = {
   nome: "Beatriz Batista",
-  crn: "[TROCAR: nº do CRN]",
-  // Número no formato internacional, só dígitos. Ex.: 5511999999999
-  whatsappNumero: "SEUNUMERO",
-  whatsappTexto: "Olá Beatriz! Vim pelo site e gostaria de agendar uma consulta.",
-  instagram: "https://instagram.com/beatrizbatista.nutri",
-  instagramHandle: "@beatrizbatista.nutri",
+  titulo: "Nutricionista Clínica e Esportiva",
+  crn: "", // preencha quando tiver o número do CRN (ex.: "CRN-3 00000")
+  // Número no formato internacional, só dígitos.
+  whatsappNumero: "5511934690909",
+  whatsappTexto: "Olá, Beatriz! Vim pelo site e quero saber mais sobre o acompanhamento.",
+  email: "beatrizbatista.nutri@hotmail.com",
+  instagram: "", // ex.: https://instagram.com/usuario
+  instagramHandle: "",
   siteUrl: "https://beatrizbatista.com.br",
-  doctoralia: "#", // [TROCAR: link do seu perfil no Doctoralia]
-  endereco: "[TROCAR: endereço do consultório em São Paulo]",
-  telefoneExibicao: "(XX) XXXXX-XXXX",
+  doctoralia: "", // link do perfil no Doctoralia, se houver
+  enderecoCurto: "Moema · São Paulo",
+  endereco: "Av. dos Carinás, 185 — Moema, São Paulo · SP",
+  enderecoSecundario: "Atendimento presencial em Moema e Avenida Paulista, e online para todo o Brasil.",
+  telefoneExibicao: "(11) 93469-0909",
 };
-
-// URL pública (HTTPS) da instância da Bia (assistant) no servidor Linux.
-// Ex.: https://assistant.beatrizbatista.com.br  (o widget chama ${chatApiUrl}/api/chat)
-// Vazio = desabilita o chat de IA no site (continua só o WhatsApp).
-export const chatApiUrl = (import.meta.env.VITE_CHAT_API_URL || "").replace(/\/+$/, "");
-export const chatAppToken = import.meta.env.VITE_CHAT_APP_TOKEN || "";
 
 export const whatsappLink = () =>
   `https://wa.me/${site.whatsappNumero}?text=${encodeURIComponent(site.whatsappTexto)}`;
+
+// URL pública (HTTPS) da instância da Bia (assistant) no servidor Linux.
+// O widget de chat chama ${chatApiUrl}/api/chat. Vazio = chat de IA oculto.
+export const chatApiUrl = (import.meta.env.VITE_CHAT_API_URL || "").replace(/\/+$/, "");
+export const chatAppToken = import.meta.env.VITE_CHAT_APP_TOKEN || "";

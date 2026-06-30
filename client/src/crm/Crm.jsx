@@ -309,7 +309,7 @@ function Board({ user }) {
                       <div className="crm-card-contato">{l.contato || l.email || l.whatsapp || ""}</div>
                       {l.agendamento?.preferencia || l.agendamento?.dataHora ? (
                         <div className="crm-card-agenda">
-                          🗓 {l.agendamento.dataHora || l.agendamento.preferencia}
+                          Agenda: {l.agendamento.dataHora || l.agendamento.preferencia}
                           {l.modalidade ? ` · ${l.modalidade}` : ""}
                         </div>
                       ) : null}

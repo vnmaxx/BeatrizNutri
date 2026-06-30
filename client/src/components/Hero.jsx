@@ -1,4 +1,4 @@
-import WhatsAppIcon from "./WhatsAppIcon.jsx";
+import Icon from "./Icon.jsx";
 import { whatsappLink } from "../config.js";
 
 export default function Hero() {
@@ -6,43 +6,45 @@ export default function Hero() {
     <section className="hero">
       <div className="container hero-grid">
         <div>
-          <span className="eyebrow">São Paulo · Presencial e Online</span>
+          <span className="eyebrow">Moema e Avenida Paulista · Presencial e Online</span>
           <h1>
-            Emagreça com saúde e <span>sem dietas malucas</span> — com um plano feito pra sua rotina
+            Para quem já tentou de tudo e quer um <span>método eficiente</span> de emagrecimento
           </h1>
           <p className="sub">
-            Acompanhamento nutricional individual para você comer melhor, ter mais energia e atingir
-            seu objetivo de forma realista e duradoura. Atendimento humano, baseado em ciência.
+            Acompanhamento nutricional individualizado, com base clínica e foco em resultado que se
+            mantém. Nutrição que entende o seu corpo, a sua rotina e o seu objetivo.
           </p>
           <div className="hero-actions">
             <a className="btn" href={whatsappLink()} target="_blank" rel="noopener">
-              <WhatsAppIcon />
+              <Icon name="phone" size={18} />
               Falar no WhatsApp
             </a>
-            <a className="btn btn-outline" href="#servicos">
-              Ver como funciona
+            <a className="btn btn-outline" href="#metodo">
+              Conhecer o método
             </a>
           </div>
           <div className="hero-trust">
             <span>
-              ⭐ <b>3.000+</b> consultas realizadas
+              <Icon name="user" size={18} /> Mais de <b>3.000</b> atendimentos
             </span>
             <span>
-              📅 Atuando desde <b>2017</b>
+              <Icon name="shield" size={18} /> Nutrição <b>clínica e esportiva</b>
             </span>
             <span>
-              💻 Presencial e <b>online</b>
+              <Icon name="monitor" size={18} /> Presencial e <b>online</b>
             </span>
           </div>
         </div>
         <div className="hero-img">
-          [TROCAR: foto profissional da Beatriz Batista — sorrindo, fundo claro, vertical 4:5]
+          [Foto profissional da Beatriz Batista — vertical 4:5, fundo claro]
           <div className="badge-float">
-            <span className="ic">🩺</span>
+            <span className="ic">
+              <Icon name="shield" size={22} />
+            </span>
             <span>
-              <b>Nutricionista verificada</b>
+              <b>Pós-graduada em Endocrinologia e Metabologia</b>
               <br />
-              Perfil no Doctoralia · São Paulo e online
+              Nutrição Clínica Funcional
             </span>
           </div>
         </div>

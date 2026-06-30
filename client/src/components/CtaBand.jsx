@@ -1,4 +1,4 @@
-import WhatsAppIcon from "./WhatsAppIcon.jsx";
+import Icon from "./Icon.jsx";
 import { whatsappLink } from "../config.js";
 
 export default function CtaBand() {
@@ -6,13 +6,13 @@ export default function CtaBand() {
     <section className="section" style={{ paddingTop: 0 }}>
       <div className="container">
         <div className="cta-band">
-          <h2>Pronta para começar a cuidar de você?</h2>
+          <h2>Pronta para reprogramar a sua relação com a comida?</h2>
           <p>
-            Dê o primeiro passo hoje. Me chame no WhatsApp, conte seu objetivo e descubra como o
-            acompanhamento pode encaixar na sua rotina.
+            Dê o primeiro passo hoje. Fale no WhatsApp, conte seu objetivo e descubra como o
+            acompanhamento encaixa na sua rotina.
           </p>
           <a className="btn" href={whatsappLink()} target="_blank" rel="noopener">
-            <WhatsAppIcon />
+            <Icon name="phone" size={18} />
             Agendar pelo WhatsApp
           </a>
         </div>

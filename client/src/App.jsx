@@ -2,7 +2,8 @@ import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
 import Strip from "./components/Strip.jsx";
 import Dores from "./components/Dores.jsx";
-import Servicos from "./components/Servicos.jsx";
+import Metodo from "./components/Metodo.jsx";
+import Especialidades from "./components/Especialidades.jsx";
 import ComoFunciona from "./components/ComoFunciona.jsx";
 import Sobre from "./components/Sobre.jsx";
 import Depoimentos from "./components/Depoimentos.jsx";
@@ -21,7 +22,8 @@ export default function App() {
         <Hero />
         <Strip />
         <Dores />
-        <Servicos />
+        <Metodo />
+        <Especialidades />
         <ComoFunciona />
         <Sobre />
         <Depoimentos />
