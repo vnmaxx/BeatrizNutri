@@ -169,7 +169,7 @@ module.exports = async (req, res) => {
     .slice(0, 4000);
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 55000);
+  const timeout = setTimeout(() => controller.abort(), 58000);
   try {
     let resp = await nvidiaChat(convo, true, controller.signal);
     let msg = resp.choices?.[0]?.message || {};
