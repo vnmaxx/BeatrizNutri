@@ -177,29 +177,44 @@ module.exports = async (req, res) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 58000);
   try {
-    let resp = await nvidiaChat(convo, true, controller.signal);
-    let msg = resp.choices?.[0]?.message || {};
-    let registered = false;
+    // UMA chamada ao modelo. Se ele dispara a ferramenta, gravamos no CRM e
+    // devolvemos uma confirmação pronta (sem 2ª ida ao modelo — muito mais rápido).
+    const resp = await nvidiaChat(convo, true, controller.signal);
+    const msg = resp.choices?.[0]?.message || {};
 
-    for (let round = 0; round < MAX_TOOL_ROUNDS && Array.isArray(msg.tool_calls) && msg.tool_calls.length; round++) {
-      convo.push(msg);
+    if (Array.isArray(msg.tool_calls) && msg.tool_calls.length) {
+      let registered = false;
+      let erroTool = "";
+      let confirmacao = "";
       for (const tc of msg.tool_calls) {
         let args = {};
         try {
           args = JSON.parse(tc.function?.arguments || "{}");
         } catch {}
         const result = await runTool(tc.function?.name, args, conversa);
-        if (result.registered) registered = true;
-        convo.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify(result) });
+        if (result.registered) {
+          registered = true;
+          confirmacao = result.mensagem || "Tudo certo, registrei seu contato.";
+        } else if (result.erro) {
+          erroTool = result.erro;
+        }
       }
-      const last = round === MAX_TOOL_ROUNDS - 1;
-      resp = await nvidiaChat(convo, !last, controller.signal);
-      msg = resp.choices?.[0]?.message || {};
+      if (registered) {
+        return res.status(200).json({
+          reply: `Prontinho! ${confirmacao} Quer adiantar mais alguma informação enquanto isso?`,
+          registered: true,
+        });
+      }
+      return res.status(200).json({
+        reply:
+          (erroTool ? erroTool + " " : "") +
+          "Para eu registrar, me confirme seu nome e um contato (WhatsApp com DDD ou e-mail), por favor.",
+        registered: false,
+      });
     }
 
-    let reply = (msg.content || "").trim() || "Desculpe, não consegui responder agora. Pode tentar de novo?";
-    reply = filtrar(reply);
-    return res.status(200).json({ reply, registered });
+    const reply = filtrar((msg.content || "").trim() || "Desculpe, não consegui responder agora. Pode tentar de novo?");
+    return res.status(200).json({ reply, registered: false });
   } catch (e) {
     const aborted = e.name === "AbortError";
     console.error("[chat] erro:", e.message);
