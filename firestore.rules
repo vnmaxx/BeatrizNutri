@@ -2,36 +2,49 @@ rules_version = '2';
 
 // Regras de segurança do Firestore — projeto beatriznutri-e17a3
 //
-// Modelo de acesso:
-// - O backend (assistant/ no Linux, via Firebase Admin SDK) IGNORA estas regras
-//   e é quem GRAVA os leads (site, chat de IA e WhatsApp).
-// - O CRM web (/interno) acessa o Firestore pelo SDK do navegador. Só usuários
-//   autenticados cujo uid está na coleção `allowlist` podem ler/editar `leads`.
-// - Visitantes anônimos NÃO têm acesso a nada por aqui.
+// Modelo de acesso (CRM por papéis):
+// - Coleção `members`: cada doc (id = uid) tem { nome, email, role }.
+//   role ∈ { admin, gestor, visualizador }.
+// - O backend (Admin SDK) IGNORA estas regras e é quem GRAVA os leads
+//   (site, chat de IA e WhatsApp) e quem cria o PRIMEIRO admin (bootstrap).
+// - admin: tudo (inclui gerenciar members e excluir leads).
+// - gestor: lê e edita leads (mover, agendar, notas). Não mexe em members.
+// - visualizador: apenas lê leads.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function memberRef() {
+      return /databases/$(database)/documents/members/$(request.auth.uid);
+    }
     function isMember() {
-      return request.auth != null
-        && exists(/databases/$(database)/documents/allowlist/$(request.auth.uid));
+      return request.auth != null && exists(memberRef());
+    }
+    function myRole() {
+      return get(memberRef()).data.role;
+    }
+    function isAdmin() {
+      return isMember() && myRole() == 'admin';
+    }
+    function canEdit() {
+      return isMember() && (myRole() == 'admin' || myRole() == 'gestor');
     }
 
-    // Allowlist: cada pessoa pode ler o PRÓPRIO doc (para o app saber se tem acesso).
-    // A escrita é feita só pelo Admin SDK / console (nunca pelo cliente).
-    match /allowlist/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow write: if false;
+    // Membros do CRM. Cada um lê o próprio doc (para descobrir o papel);
+    // membros leem a lista; só admin cria/edita/remove.
+    match /members/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isMember());
+      allow create, update, delete: if isAdmin();
     }
 
-    // Leads/pacientes do CRM: leitura e edição apenas para membros da allowlist.
-    // A criação normal vem do backend (Admin SDK); o cliente pode editar/excluir.
+    // Leads/pacientes.
     match /leads/{leadId} {
-      allow read, update, delete: if isMember();
-      allow create: if isMember();
+      allow read: if isMember();
+      allow create, update: if canEdit();
+      allow delete: if isAdmin();
     }
 
-    // Bloqueio geral para qualquer outra coleção.
+    // Bloqueio geral.
     match /{document=**} {
       allow read, write: if false;
     }

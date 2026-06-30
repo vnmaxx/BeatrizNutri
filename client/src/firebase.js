@@ -1,9 +1,9 @@
 // Inicialização do Firebase no frontend: Analytics (landing), Auth + Firestore (CRM).
 // A configuração é pública por natureza (vai para o bundle do navegador). O acesso
-// aos dados é controlado pelas regras do Firestore (allowlist) — ver firestore.rules.
-import { initializeApp } from "firebase/app";
+// aos dados é controlado pelas regras do Firestore (papéis) — ver firestore.rules.
+import { initializeApp, deleteApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -19,7 +19,24 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const googleProvider = new GoogleAuthProvider();
+
+// Cria a conta (Auth) de um novo funcionário SEM derrubar a sessão do admin,
+// usando uma instância secundária do app. Retorna o uid do novo usuário.
+export async function criarContaFuncionario(email, senha, nomeApp) {
+  const secondary = initializeApp(firebaseConfig, nomeApp || `sec-${email}`);
+  const secAuth = getAuth(secondary);
+  try {
+    const cred = await createUserWithEmailAndPassword(secAuth, email, senha);
+    await signOut(secAuth);
+    return cred.user.uid;
+  } finally {
+    try {
+      await deleteApp(secondary);
+    } catch {
+      /* ignore */
+    }
+  }
+}
 
 // Analytics só funciona no navegador e em ambientes suportados (https).
 export async function initAnalytics() {

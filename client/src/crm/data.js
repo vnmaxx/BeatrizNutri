@@ -1,11 +1,12 @@
 // Camada de dados do CRM — Firestore client SDK. O acesso é controlado pelas
-// regras (firestore.rules): só usuários autenticados cujo uid está na coleção
-// `allowlist` conseguem ler/escrever `leads`.
+// regras (firestore.rules): só usuários cujo uid está em `members` acessam
+// `leads`; só `admin` gerencia `members`.
 import {
   collection,
   doc,
   getDoc,
   getDocs,
+  setDoc,
   orderBy,
   query,
   updateDoc,
@@ -13,14 +14,50 @@ import {
   arrayUnion,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../firebase.js";
+import { db, criarContaFuncionario } from "../firebase.js";
 
-export async function isAllowed(uid) {
-  if (!uid) return false;
-  const snap = await getDoc(doc(db, "allowlist", uid));
-  return snap.exists();
+// ---------- Papéis / permissões ----------
+export const ROLES = {
+  admin: { label: "Administrador", desc: "Acesso total, incluindo configurações e exclusão." },
+  gestor: { label: "Gestor", desc: "Gerencia leads e agendamentos. Sem configurações." },
+  visualizador: { label: "Visualizador", desc: "Apenas visualiza os leads." },
+};
+export const podeEditar = (role) => role === "admin" || role === "gestor";
+export const ehAdmin = (role) => role === "admin";
+
+// ---------- Membros ----------
+export async function getMyRole(uid) {
+  if (!uid) return null;
+  const snap = await getDoc(doc(db, "members", uid));
+  return snap.exists() ? snap.data().role || "visualizador" : null;
 }
 
+export async function getMembers() {
+  const snap = await getDocs(collection(db, "members"));
+  return snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
+}
+
+// Cria a conta de Auth + o documento do membro (papel). Roda como admin.
+export async function addMember({ nome, email, senha, role }) {
+  const uid = await criarContaFuncionario(email.trim(), senha, `add-${Date.now()}`);
+  await setDoc(doc(db, "members", uid), {
+    nome: nome.trim(),
+    email: email.trim().toLowerCase(),
+    role,
+    criadoEm: serverTimestamp(),
+  });
+  return uid;
+}
+
+export async function updateMemberRole(uid, role) {
+  await updateDoc(doc(db, "members", uid), { role });
+}
+
+export async function removeMember(uid) {
+  await deleteDoc(doc(db, "members", uid));
+}
+
+// ---------- Leads ----------
 export async function getLeads() {
   const q = query(collection(db, "leads"), orderBy("createdAt", "desc"));
   const snap = await getDocs(q);

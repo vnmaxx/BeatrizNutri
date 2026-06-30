@@ -446,3 +446,119 @@
   border-color: var(--verde);
   background: #fff;
 }
+
+/* NAV + papel */
+.crm-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 18px;
+}
+.crm-nav button {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cinza);
+  cursor: pointer;
+}
+.crm-nav button.on {
+  background: var(--verde-claro);
+  color: var(--verde-escuro);
+}
+.crm-role-badge {
+  background: var(--verde-claro);
+  color: var(--verde-escuro);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+.crm-readonly {
+  align-self: center;
+  font-size: 0.8rem;
+  color: var(--cinza);
+  background: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+/* CONFIGURAÇÕES */
+.crm-settings {
+  display: grid;
+  gap: 20px;
+  max-width: 900px;
+}
+.crm-panel {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  padding: 22px;
+}
+.crm-panel h2 {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+.crm-member-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  margin-top: 14px;
+}
+.crm-member-form input,
+.crm-member-form select {
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+@media (max-width: 760px) {
+  .crm-member-form {
+    grid-template-columns: 1fr;
+  }
+}
+.form-msg {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.form-msg.ok {
+  background: var(--verde-claro);
+  color: var(--verde-escuro);
+}
+.form-msg.err {
+  background: #fdecec;
+  color: #b23b3b;
+}
+.crm-roles-help {
+  margin-top: 16px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--cinza);
+}
+.crm-members {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.crm-members th,
+.crm-members td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--borda);
+  font-size: 0.9rem;
+}
+.crm-members th {
+  color: var(--cinza);
+  font-weight: 600;
+}
+.crm-members select {
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-family: inherit;
+}
