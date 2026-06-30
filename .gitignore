@@ -9,3 +9,10 @@ server/data/leads.json
 .DS_Store
 .vscode/
 .idea/
+
+.vercel
+.env*
+
+# Credenciais Firebase (NÃO versionar)
+server/serviceAccountKey.json
+serviceAccountKey.json

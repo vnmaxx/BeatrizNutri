@@ -9,6 +9,9 @@
     "build": "npm install --prefix client && npm run build --prefix client",
     "start": "npm start --prefix server"
   },
+  "dependencies": {
+    "firebase-admin": "^13.0.2"
+  },
   "devDependencies": {
     "concurrently": "^9.1.0"
   }

@@ -3,6 +3,11 @@ import cors from "cors";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const firebase = require("../lib/firebaseAdmin.cjs");
+const usandoFirebase = firebase.isConfigured();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,7 +49,12 @@ async function writeLeads(leads) {
 
 // Healthcheck
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok", service: "beatriz-nutri", time: new Date().toISOString() });
+  res.json({
+    status: "ok",
+    service: "beatriz-nutri",
+    storage: usandoFirebase ? "firestore" : "arquivo",
+    time: new Date().toISOString(),
+  });
 });
 
 // Recebe um lead do formulário de contato
@@ -68,9 +78,13 @@ app.post("/api/leads", async (req, res) => {
   };
 
   try {
-    const leads = await readLeads();
-    leads.push(lead);
-    await writeLeads(leads);
+    if (usandoFirebase) {
+      await firebase.saveLead(lead);
+    } else {
+      const leads = await readLeads();
+      leads.push(lead);
+      await writeLeads(leads);
+    }
     return res.status(201).json({ ok: true, lead });
   } catch (err) {
     console.error("Erro ao salvar lead:", err);
@@ -84,8 +98,13 @@ app.get("/api/leads", async (req, res) => {
   if (token && req.query.token !== token) {
     return res.status(401).json({ ok: false, error: "Não autorizado." });
   }
-  const leads = await readLeads();
-  res.json({ ok: true, total: leads.length, leads });
+  try {
+    const leads = usandoFirebase ? await firebase.getLeads() : await readLeads();
+    res.json({ ok: true, total: leads.length, leads });
+  } catch (err) {
+    console.error("Erro ao listar leads:", err);
+    res.status(500).json({ ok: false, error: "Erro ao listar leads." });
+  }
 });
 
 // Serve o frontend buildado em produção
