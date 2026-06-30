@@ -10,7 +10,7 @@ const BASE_URL = process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.co
 const TEMPERATURE = Number(process.env.TEMPERATURE || 0.4);
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 4000;
-const MAX_TOOL_ROUNDS = 3;
+const MAX_TOOL_ROUNDS = 2;
 
 function buildSystemPrompt() {
   return `Você é a assistente virtual oficial da nutricionista Beatriz Batista (atende em São Paulo — Moema e Avenida Paulista — e online). Você conversa com visitantes do site. Seu objetivo é acolher, tirar dúvidas gerais e, principalmente, AGENDAR consultas registrando o contato da pessoa.
@@ -117,7 +117,7 @@ async function runTool(name, args, conversa) {
 }
 
 async function nvidiaChat(messages, useTools, signal) {
-  const body = { model: MODEL, messages, temperature: TEMPERATURE, max_tokens: 800 };
+  const body = { model: MODEL, messages, temperature: TEMPERATURE, max_tokens: 500 };
   if (useTools) {
     body.tools = tools;
     body.tool_choice = "auto";
@@ -162,7 +162,13 @@ module.exports = async (req, res) => {
   const messages = sanitize((req.body || {}).messages);
   if (!messages || !messages.length) return res.status(400).json({ error: "Envie ao menos uma mensagem." });
 
-  const convo = [{ role: "system", content: buildSystemPrompt() }, ...messages];
+  // "detailed thinking off": desliga o raciocínio verboso do nemotron (respostas
+  // muito mais rápidas — essencial para o fluxo de ferramenta caber no tempo).
+  const convo = [
+    { role: "system", content: "detailed thinking off" },
+    { role: "system", content: buildSystemPrompt() },
+    ...messages,
+  ];
   const conversa = messages
     .map((m) => `${m.role === "user" ? "Pessoa" : "Assistente"}: ${m.content}`)
     .join("\n")
