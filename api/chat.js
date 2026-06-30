@@ -5,7 +5,10 @@
 const { saveLead, validarContato } = require("../lib/firebaseAdmin.cjs");
 
 const API_KEY = process.env.NVIDIA_API_KEY;
-const MODEL = process.env.NVIDIA_MODEL || "nvidia/llama-3.3-nemotron-super-49b-v1.5";
+// Modelo rápido com suporte a ferramentas (sem overhead de "raciocínio"), ideal
+// para chat de site em serverless. Pode ser trocado via env NVIDIA_MODEL.
+const MODEL = process.env.NVIDIA_MODEL || "meta/llama-3.3-70b-instruct";
+const IS_NEMOTRON = /nemotron/i.test(MODEL);
 const BASE_URL = process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.com/v1";
 const TEMPERATURE = Number(process.env.TEMPERATURE || 0.4);
 const MAX_MESSAGES = 12;
@@ -162,10 +165,10 @@ module.exports = async (req, res) => {
   const messages = sanitize((req.body || {}).messages);
   if (!messages || !messages.length) return res.status(400).json({ error: "Envie ao menos uma mensagem." });
 
-  // "detailed thinking off": desliga o raciocínio verboso do nemotron (respostas
-  // muito mais rápidas — essencial para o fluxo de ferramenta caber no tempo).
+  // Para nemotron, "detailed thinking off" desliga o raciocínio verboso. Para
+  // modelos instruct comuns isso não é necessário.
   const convo = [
-    { role: "system", content: "detailed thinking off" },
+    ...(IS_NEMOTRON ? [{ role: "system", content: "detailed thinking off" }] : []),
     { role: "system", content: buildSystemPrompt() },
     ...messages,
   ];
