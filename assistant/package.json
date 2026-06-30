@@ -1,0 +1,18 @@
+{
+  "name": "bia-assistant",
+  "version": "1.0.0",
+  "description": "Instância isolada: assistente de IA (NVIDIA NIM) + CRM + WhatsApp para a nutricionista Beatriz Batista",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --env-file=.env src/server.js",
+    "dev": "node --env-file=.env --watch src/server.js",
+    "whatsapp": "node --env-file=.env src/whatsapp.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.9",
+    "firebase-admin": "^13.0.2",
+    "pino": "^9.5.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

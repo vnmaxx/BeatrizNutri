@@ -13,5 +13,11 @@ export const site = {
   telefoneExibicao: "(XX) XXXXX-XXXX",
 };
 
+// URL pública (HTTPS) da instância da Bia (assistant) no servidor Linux.
+// Ex.: https://assistant.beatrizbatista.com.br  (o widget chama ${chatApiUrl}/api/chat)
+// Vazio = desabilita o chat de IA no site (continua só o WhatsApp).
+export const chatApiUrl = (import.meta.env.VITE_CHAT_API_URL || "").replace(/\/+$/, "");
+export const chatAppToken = import.meta.env.VITE_CHAT_APP_TOKEN || "";
+
 export const whatsappLink = () =>
   `https://wa.me/${site.whatsappNumero}?text=${encodeURIComponent(site.whatsappTexto)}`;

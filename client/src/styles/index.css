@@ -777,3 +777,171 @@ footer a:hover {
     font-size: 1.6rem;
   }
 }
+
+/* CHAT WIDGET (assistente de IA) */
+.biachat {
+  position: fixed;
+  bottom: 22px;
+  right: 96px;
+  z-index: 98;
+}
+@media (max-width: 560px) {
+  .biachat {
+    right: 16px;
+    bottom: 92px;
+  }
+}
+.biachat-launch {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 13px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(58, 138, 95, 0.45);
+  transition: 0.2s;
+}
+.biachat-launch:hover {
+  background: var(--verde-escuro);
+  transform: translateY(-2px);
+}
+.biachat-panel {
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  height: 520px;
+  max-height: calc(100vh - 120px);
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(40, 80, 55, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.biachat-head {
+  background: var(--verde);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.biachat-head strong {
+  display: block;
+  font-size: 1rem;
+}
+.biachat-head span {
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+.biachat-x {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.biachat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.biachat-msg {
+  display: flex;
+}
+.biachat-msg.user {
+  justify-content: flex-end;
+}
+.biachat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.93rem;
+  line-height: 1.45;
+}
+.biachat-msg.bot .biachat-bubble {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-bottom-left-radius: 4px;
+}
+.biachat-msg.user .biachat-bubble {
+  background: var(--verde);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.biachat-typing {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.biachat-typing i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cinza);
+  animation: biablink 1.2s infinite both;
+}
+.biachat-typing i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.biachat-typing i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes biablink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+.biachat-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--verde-escuro);
+  background: var(--verde-claro);
+  border-radius: 10px;
+  padding: 8px;
+}
+.biachat-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--borda);
+  background: #fff;
+}
+.biachat-input input {
+  flex: 1;
+  border: 1px solid var(--borda);
+  border-radius: 50px;
+  padding: 10px 14px;
+  font-size: 0.93rem;
+  font-family: inherit;
+}
+.biachat-input input:focus {
+  outline: none;
+  border-color: var(--verde);
+}
+.biachat-input button {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  width: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.biachat-input button:disabled {
+  opacity: 0.6;
+}
+.biachat-walink {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--verde);
+  padding: 8px;
+  background: #fff;
+  border-top: 1px solid var(--borda);
+}

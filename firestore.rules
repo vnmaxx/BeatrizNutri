@@ -1,0 +1,39 @@
+rules_version = '2';
+
+// Regras de segurança do Firestore — projeto beatriznutri-e17a3
+//
+// Modelo de acesso:
+// - O backend (assistant/ no Linux, via Firebase Admin SDK) IGNORA estas regras
+//   e é quem GRAVA os leads (site, chat de IA e WhatsApp).
+// - O CRM web (/interno) acessa o Firestore pelo SDK do navegador. Só usuários
+//   autenticados cujo uid está na coleção `allowlist` podem ler/editar `leads`.
+// - Visitantes anônimos NÃO têm acesso a nada por aqui.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isMember() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/allowlist/$(request.auth.uid));
+    }
+
+    // Allowlist: cada pessoa pode ler o PRÓPRIO doc (para o app saber se tem acesso).
+    // A escrita é feita só pelo Admin SDK / console (nunca pelo cliente).
+    match /allowlist/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Leads/pacientes do CRM: leitura e edição apenas para membros da allowlist.
+    // A criação normal vem do backend (Admin SDK); o cliente pode editar/excluir.
+    match /leads/{leadId} {
+      allow read, update, delete: if isMember();
+      allow create: if isMember();
+    }
+
+    // Bloqueio geral para qualquer outra coleção.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

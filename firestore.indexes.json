@@ -1,0 +1,10 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "leads",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "whatsappId", "order": "ASCENDING" }]
+    }
+  ],
+  "fieldOverrides": []
+}

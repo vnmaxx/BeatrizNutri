@@ -1,0 +1,18 @@
+[Unit]
+Description=Bia WhatsApp Bot (Baileys) — entrega/agenda no CRM
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/bia/assistant
+EnvironmentFile=/opt/bia/assistant/.env
+ExecStart=/usr/bin/node src/whatsapp.js
+Restart=on-failure
+RestartSec=5
+User=bia
+Group=bia
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

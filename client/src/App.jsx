@@ -11,6 +11,7 @@ import CtaBand from "./components/CtaBand.jsx";
 import Faq from "./components/Faq.jsx";
 import Footer from "./components/Footer.jsx";
 import WhatsAppFloat from "./components/WhatsAppFloat.jsx";
+import ChatWidget from "./components/ChatWidget.jsx";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppFloat />
+      <ChatWidget />
     </>
   );
 }

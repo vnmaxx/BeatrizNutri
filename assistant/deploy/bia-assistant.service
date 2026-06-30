@@ -1,0 +1,21 @@
+[Unit]
+Description=Bia Assistant (NVIDIA NIM) — chat do site + contato
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Ajuste o caminho onde você clonou/enviou a pasta assistant/.
+WorkingDirectory=/opt/bia/assistant
+EnvironmentFile=/opt/bia/assistant/.env
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=3
+User=bia
+Group=bia
+# Endurecimento básico
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
