@@ -5,9 +5,9 @@
 const { saveLead, validarContato } = require("../lib/firebaseAdmin.cjs");
 
 const API_KEY = process.env.NVIDIA_API_KEY;
-// Modelo rápido com suporte a ferramentas (sem overhead de "raciocínio"), ideal
-// para chat de site em serverless. Pode ser trocado via env NVIDIA_MODEL.
-const MODEL = process.env.NVIDIA_MODEL || "meta/llama-3.3-70b-instruct";
+// Modelo rápido com suporte a ferramentas (responde em ~1s no endpoint NVIDIA),
+// ideal para chat de site em serverless. Pode ser trocado via env NVIDIA_MODEL.
+const MODEL = process.env.NVIDIA_MODEL || "meta/llama-3.1-8b-instruct";
 const IS_NEMOTRON = /nemotron/i.test(MODEL);
 const BASE_URL = process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.com/v1";
 const TEMPERATURE = Number(process.env.TEMPERATURE || 0.4);
