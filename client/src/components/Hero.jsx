@@ -1,24 +1,8 @@
-import { Suspense, lazy, useEffect, useState } from "react";
 import Icon from "./Icon.jsx";
-import SafeCanvas from "./SafeCanvas.jsx";
+import Lazy3D from "./Lazy3D.jsx";
 import { whatsappLink } from "../config.js";
 
-const Scene3D = lazy(() => import("./Scene3D.jsx"));
-
 export default function Hero() {
-  // Só monta o WebGL no cliente e em telas que o suportam (degrada com elegância).
-  const [canRender3D, setCanRender3D] = useState(false);
-  useEffect(() => {
-    try {
-      const canvas = document.createElement("canvas");
-      const ok = !!(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      setCanRender3D(ok && !reduced);
-    } catch {
-      setCanRender3D(false);
-    }
-  }, []);
-
   return (
     <section className="hero">
       <div className="hero-bg" aria-hidden="true" />
@@ -56,15 +40,11 @@ export default function Hero() {
         </div>
 
         <div className="hero-visual">
-          <div className="hero-canvas">
-            {canRender3D && (
-              <SafeCanvas fallback={<div className="hero-canvas-fallback" />}>
-                <Suspense fallback={<div className="hero-canvas-fallback" />}>
-                  <Scene3D />
-                </Suspense>
-              </SafeCanvas>
-            )}
-          </div>
+          <Lazy3D
+            className="hero-canvas"
+            load={() => import("../three/HeroScene.jsx")}
+            fallback={<div className="hero-canvas-fallback" />}
+          />
           <div className="hero-badge-card">
             <span className="ic">
               <Icon name="shield" size={22} />

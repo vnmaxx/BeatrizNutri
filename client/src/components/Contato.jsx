@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "./Icon.jsx";
+import Lazy3D from "./Lazy3D.jsx";
 import { site, whatsappLink } from "../config.js";
 
 const estadoInicial = { nome: "", telefone: "", objetivo: "", mensagem: "" };
@@ -114,6 +115,11 @@ export default function Contato() {
           </form>
 
           <div className="contato-info">
+            <Lazy3D
+              className="contato-scene"
+              load={() => import("../three/ContatoScene.jsx")}
+              fallback={<div className="scene-fallback" />}
+            />
             <h3>Prefere falar agora?</h3>
             <p>
               O atendimento é individual e humano. Chame no WhatsApp, conte seu objetivo e a Beatriz

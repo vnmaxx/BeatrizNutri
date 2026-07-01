@@ -1249,3 +1249,200 @@ header {
     radial-gradient(60% 60% at 85% 0%, rgba(127, 199, 155, 0.1), transparent 60%),
     var(--bg);
 }
+
+/* ===================== 3D CONTEXTUAL + MOTIVOS (v2) ===================== */
+:root {
+  --sage: #9fb392;
+  --gold: #c3a368;
+  --bone: #efe9dd;
+  --beige: #e3d8c2;
+}
+
+/* Fallbacks das cenas (enquanto o WebGL carrega / degrada) */
+.scene-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: radial-gradient(60% 80% at 50% 40%, rgba(159, 179, 146, 0.18), transparent 70%);
+  opacity: 0.6;
+}
+.scene-fallback.round {
+  border-radius: 50%;
+}
+
+/* MÉTODO — faixa 3D acima das etapas */
+.metodo-scene {
+  height: 240px;
+  margin: 26px 0 8px;
+}
+@media (max-width: 560px) {
+  .metodo-scene {
+    height: 180px;
+  }
+}
+
+/* SOBRE — escultura discreta ao lado da foto */
+.sobre-media {
+  position: relative;
+}
+.sobre-scene {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 168px;
+  height: 168px;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 30px rgba(40, 80, 55, 0.12));
+}
+@media (max-width: 880px) {
+  .sobre-scene {
+    width: 120px;
+    height: 120px;
+    top: -18px;
+    right: -8px;
+  }
+}
+
+/* CONTATO — caminhos convergentes acima do bloco de contato */
+.contato-scene {
+  height: 190px;
+  margin: -10px 0 6px;
+}
+
+/* ESPECIALIDADES — motivos SVG */
+.esp-motif {
+  display: flex;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background: rgba(159, 179, 146, 0.16);
+  align-items: center;
+  justify-content: center;
+}
+.esp-motif svg {
+  width: 72%;
+  height: 72%;
+  overflow: visible;
+}
+.esp-motif .ln {
+  stroke: var(--sage);
+}
+.esp-motif .au {
+  stroke: var(--gold);
+}
+.esp-motif .fillsage {
+  fill: var(--sage);
+}
+.esp-motif .fillgold {
+  fill: var(--gold);
+}
+
+.esp-equilibrio .seesaw {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: seesaw 4.5s ease-in-out infinite;
+}
+@keyframes seesaw {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+.esp-organizar circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+.esp-organizar .r2 { animation-delay: 0.25s; }
+.esp-organizar .r3 { animation-delay: 0.5s; }
+@keyframes ringPulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.7; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+.esp-ciclo .orbit {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spin 7s linear infinite;
+}
+.esp-ciclo .orbit2 {
+  animation-duration: 7s;
+  animation-direction: reverse;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.esp-sincronia .wave {
+  animation: waveMove 3.2s linear infinite;
+}
+.esp-sincronia .wave2 {
+  animation-delay: -1.6s;
+}
+@keyframes waveMove {
+  to { transform: translateX(-40px); }
+}
+.esp-fibras .fibras-g {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fibras 3.6s ease-in-out infinite;
+}
+@keyframes fibras {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(0.9) scaleX(1.05); }
+}
+.esp-camadas line {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: camada 4s ease-in-out infinite;
+}
+.esp-camadas .c2 { animation-delay: 0.2s; }
+.esp-camadas .c3 { animation-delay: 0.4s; }
+@keyframes camada {
+  0%, 100% { transform: translateY(-2.5px); opacity: 0.75; }
+  50% { transform: translateY(2.5px); opacity: 1; }
+}
+
+/* DEPOIMENTOS — ondas suaves expandindo atrás dos cards */
+.depo-section {
+  position: relative;
+  overflow: hidden;
+}
+.depo-section .container {
+  position: relative;
+  z-index: 1;
+}
+.depo-waves {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.depo-waves span {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px solid rgba(159, 179, 146, 0.22);
+  animation: ripple 8s ease-out infinite;
+}
+.depo-waves span:nth-child(2) { animation-delay: 2.6s; }
+.depo-waves span:nth-child(3) { animation-delay: 5.2s; }
+@keyframes ripple {
+  0% { transform: scale(0.35); opacity: 0; }
+  15% { opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Detalhe editorial: fio dourado sob o eyebrow */
+.sec-head .eyebrow {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esp-motif *,
+  .depo-waves span {
+    animation: none !important;
+  }
+}

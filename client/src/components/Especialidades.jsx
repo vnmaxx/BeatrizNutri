@@ -1,33 +1,33 @@
-import Icon from "./Icon.jsx";
+import EspecialidadeMotif from "./EspecialidadeMotif.jsx";
 
 const especialidades = [
   {
-    icon: "scale",
+    motif: "equilibrio",
     titulo: "Emagrecimento com saúde",
     texto: "Perca peso sem passar fome, com um plano flexível e acompanhamento de perto.",
   },
   {
-    icon: "droplet",
+    motif: "organizar",
     titulo: "Desordens endócrinas e metabólicas",
     texto: "Conduta nutricional para controle de glicemia e equilíbrio hormonal, junto ao seu médico.",
   },
   {
-    icon: "heart",
+    motif: "ciclo",
     titulo: "Síndrome do Ovário Policístico (SOP)",
     texto: "Estratégia alimentar para melhorar resistência à insulina, hormônios e sintomas da SOP.",
   },
   {
-    icon: "spark",
+    motif: "sincronia",
     titulo: "TPM e equilíbrio hormonal",
     texto: "Alimentação que ajuda a reduzir sintomas da TPM e dar mais estabilidade ao seu ciclo.",
   },
   {
-    icon: "dumbbell",
+    motif: "fibras",
     titulo: "Performance e hipertrofia",
     texto: "Nutrição esportiva para ganho de massa, desempenho e recuperação, alinhada ao treino.",
   },
   {
-    icon: "flask",
+    motif: "camadas",
     titulo: "Nutrição clínica funcional",
     texto: "Leitura de exames e foco na causa, não só no sintoma, com base científica.",
   },
@@ -47,10 +47,8 @@ export default function Especialidades() {
         </div>
         <div className="serv-grid">
           {especialidades.map((s) => (
-            <div className="card" key={s.titulo}>
-              <span className="ic">
-                <Icon name={s.icon} size={26} />
-              </span>
+            <div className="card esp-card" key={s.titulo}>
+              <EspecialidadeMotif variant={s.motif} />
               <h3>{s.titulo}</h3>
               <p>{s.texto}</p>
             </div>

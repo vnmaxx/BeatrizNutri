@@ -21,7 +21,12 @@ const depoimentos = [
 
 export default function Depoimentos() {
   return (
-    <section className="section">
+    <section className="section depo-section">
+      <div className="depo-waves" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <div className="container">
         <div className="sec-head">
           <span className="eyebrow">Resultados de quem confiou</span>

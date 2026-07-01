@@ -1,10 +1,18 @@
+import Lazy3D from "./Lazy3D.jsx";
 import { site, whatsappLink } from "../config.js";
 
 export default function Sobre() {
   return (
     <section className="section sobre" id="sobre">
       <div className="container sobre-grid">
-        <div className="sobre-img">[Foto da Beatriz no consultório — formato quadrado]</div>
+        <div className="sobre-media">
+          <div className="sobre-img">[Foto da Beatriz no consultório — formato quadrado]</div>
+          <Lazy3D
+            className="sobre-scene"
+            load={() => import("../three/SobreScene.jsx")}
+            fallback={<div className="scene-fallback round" />}
+          />
+        </div>
         <div>
           <span className="eyebrow">Quem vai te atender</span>
           <h2>Beatriz Batista, nutricionista clínica e esportiva</h2>
