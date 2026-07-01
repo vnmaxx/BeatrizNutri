@@ -1,4 +1,5 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import Lenis from "lenis";
 import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
 import Journey from "./components/Journey.jsx";
@@ -17,6 +18,22 @@ import WhatsAppFloat from "./components/WhatsAppFloat.jsx";
 import ChatWidget from "./components/ChatWidget.jsx";
 
 export default function App() {
+  // Smooth scroll (Lenis) — desligado se o usuário pediu "reduzir movimento".
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({ duration: 1.1, smoothWheel: true, touchMultiplier: 1.6 });
+    let raf;
+    const loop = (t) => {
+      lenis.raf(t);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      lenis.destroy();
+    };
+  }, []);
+
   // Animação de revelação ao rolar — aplicada globalmente para não tocar cada seção.
   useLayoutEffect(() => {
     const sel =

@@ -1555,3 +1555,146 @@ header {
     display: none;
   }
 }
+
+/* ===================== "A REPROGRAMAÇÃO" (conceito) ===================== */
+:root {
+  --terra: #b5654a;
+  --earth: #2b241d;
+  --earth-soft: #3a3129;
+}
+
+/* HERO terroso, texto claro */
+.hero-earth {
+  background:
+    radial-gradient(70% 90% at 78% 30%, rgba(181, 101, 74, 0.35), transparent 70%),
+    radial-gradient(60% 80% at 20% 80%, rgba(125, 148, 104, 0.25), transparent 70%),
+    linear-gradient(160deg, #241e18, #322a22 60%, #3a3129);
+  color: var(--bone);
+}
+.hero-earth .hero-bg {
+  display: none;
+}
+.hero-earth .eyebrow {
+  background: rgba(195, 163, 104, 0.16);
+  color: #e8d6ac;
+}
+.hero-earth .hero-title {
+  color: var(--ceramic, #f5f2ec);
+}
+.hero-earth .hero-title .grad {
+  background: linear-gradient(100deg, #d8a15f, #e9cf9a 55%, #b5654a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-earth .sub {
+  color: #cdc3b4;
+}
+.hero-earth .hero-trust {
+  color: #b9ad9c;
+}
+.hero-earth .hero-trust b {
+  color: var(--bone);
+}
+.hero-earth .hero-trust svg {
+  color: #d8a15f;
+}
+.hero-earth .hero-scroll {
+  border-color: rgba(232, 214, 172, 0.4);
+}
+.hero-earth .hero-scroll span {
+  background: #d8a15f;
+}
+/* título com distorção que se resolve */
+.hero-title {
+  filter: blur(6px);
+  letter-spacing: 0.04em;
+  opacity: 0.4;
+  transition: filter 0.9s ease, letter-spacing 0.9s ease, opacity 0.9s ease;
+}
+.hero-earth.resolved .hero-title {
+  filter: blur(0);
+  letter-spacing: -0.03em;
+  opacity: 1;
+}
+/* botão fantasma para o hero escuro */
+.btn-ghost {
+  background: transparent;
+  color: var(--bone);
+  border: 1.5px solid rgba(232, 214, 172, 0.5);
+  box-shadow: none;
+}
+.btn-ghost:hover {
+  background: rgba(232, 214, 172, 0.12);
+  color: #fff;
+}
+
+/* JORNADA — barra de progresso + fallback 2D no mobile */
+.journey-progress {
+  margin-bottom: 14px;
+}
+.journey-bar {
+  height: 6px;
+  border-radius: 6px;
+  background: var(--borda);
+  overflow: hidden;
+  margin-top: 8px;
+}
+.journey-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--gold) 60%, var(--verde));
+  border-radius: 6px;
+  transition: width 0.15s linear;
+}
+.journey-fallback {
+  position: absolute;
+  inset: 0;
+  transition: background 0.8s ease;
+  background: radial-gradient(60% 70% at 60% 40%, rgba(181, 101, 74, 0.4), var(--earth) 70%);
+}
+.journey-fallback[data-act="1"] {
+  background: radial-gradient(60% 70% at 55% 45%, rgba(195, 163, 104, 0.4), var(--earth) 70%);
+}
+.journey-fallback[data-act="2"] {
+  background: radial-gradient(60% 70% at 50% 50%, rgba(159, 179, 146, 0.42), var(--earth) 72%);
+}
+.journey-fallback[data-act="3"] {
+  background: radial-gradient(55% 65% at 50% 45%, rgba(195, 163, 104, 0.5), #33422f 74%);
+}
+
+/* CTA — portal luminoso */
+.cta-band {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--verde-escuro), #2f3a2b 55%, var(--earth-soft));
+}
+.cta-portal,
+.cta-portal-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.cta-portal-fallback {
+  background: radial-gradient(40% 55% at 50% 45%, rgba(195, 163, 104, 0.45), transparent 70%);
+}
+.cta-band-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ESPECIALIDADES — painéis de vidro em profundidade */
+.serv-grid {
+  perspective: 1300px;
+}
+.esp-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s, border-color 0.3s;
+}
+.esp-card:hover {
+  transform: translateZ(34px) translateY(-4px) rotateX(3deg);
+  box-shadow: 0 30px 60px rgba(40, 80, 55, 0.18);
+}

@@ -1,22 +1,24 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import SafeCanvas from "./SafeCanvas.jsx";
-import { useCanRender3D } from "../three/use3d.js";
+import { useCanRender3D, useIsDesktop } from "../three/use3d.js";
 import { whatsappLink } from "../config.js";
 
 const JourneyScene = lazy(() => import("../three/JourneyScene.jsx"));
 
 const ACTS = [
-  { t: "A consulta", d: "Tudo começa com uma avaliação individual e completa: histórico, rotina, exames e bioimpedância." },
-  { t: "O seu plano", d: "Um plano alimentar feito para o seu corpo e o seu objetivo — a base do Método Reprograme, de 12 semanas." },
-  { t: "A rotina", d: "Você segue no dia a dia, com hábitos sustentáveis e suporte de perto no WhatsApp. Sem dieta impossível." },
-  { t: "A transformação", d: "O resultado aparece e, principalmente, se mantém. Equilíbrio que continua depois do acompanhamento." },
+  { t: "Primeiro contato", d: "Você chama no WhatsApp e conta seu objetivo. Surge o primeiro passo da sua reprogramação." },
+  { t: "Avaliação completa", d: "Anamnese, exames e bioimpedância: entendemos o seu corpo por dentro, sem achismo." },
+  { t: "Plano individualizado", d: "As peças se encaixam. Um plano feito para a sua rotina — a base do Método Reprograme, de 12 semanas." },
+  { t: "A transformação", d: "A instabilidade do efeito sanfona dá lugar ao equilíbrio. Um resultado que permanece." },
 ];
 
 export default function Journey() {
   const can = useCanRender3D();
+  const desktop = useIsDesktop();
   const wrapRef = useRef(null);
   const progress = useRef(0);
   const [act, setAct] = useState(0);
+  const [pct, setPct] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,9 +29,9 @@ export default function Journey() {
       const total = el.offsetHeight - window.innerHeight;
       const p = Math.min(1, Math.max(0, -rect.top / (total || 1)));
       progress.current = p;
+      setPct(p);
       if (rect.top < window.innerHeight && rect.bottom > 0) setMounted(true);
-      const a = Math.max(0, Math.min(ACTS.length - 1, Math.floor(p * ACTS.length - 1e-6)));
-      setAct(a);
+      setAct(Math.max(0, Math.min(ACTS.length - 1, Math.floor(p * ACTS.length - 1e-6))));
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -40,28 +42,35 @@ export default function Journey() {
     };
   }, []);
 
+  const use3D = can && desktop;
+
   return (
     <section className="journey" ref={wrapRef} id="jornada">
       <div className="journey-sticky">
         <div className="journey-canvas">
-          {can && mounted ? (
-            <SafeCanvas fallback={<div className="scene-fallback" />}>
-              <Suspense fallback={<div className="scene-fallback" />}>
+          {use3D && mounted ? (
+            <SafeCanvas fallback={<div className="journey-fallback" />}>
+              <Suspense fallback={<div className="journey-fallback" />}>
                 <JourneyScene progressRef={progress} />
               </Suspense>
             </SafeCanvas>
           ) : (
-            <div className="scene-fallback" />
+            <div className="journey-fallback" data-act={act} />
           )}
         </div>
 
         <div className="journey-overlay">
           <div className="container journey-overlay-inner">
             <div className="journey-caption">
-              <span className="eyebrow">Sua jornada no Método Reprograme</span>
-              <span className="journey-step">
-                Etapa {act + 1} de {ACTS.length}
-              </span>
+              <span className="eyebrow">A Reprogramação · jornada de 12 semanas</span>
+              <div className="journey-progress">
+                <span className="journey-step">
+                  Etapa {act + 1} de {ACTS.length}
+                </span>
+                <div className="journey-bar">
+                  <div className="journey-bar-fill" style={{ width: `${Math.round((pct * 0.9 + (act + 1) / ACTS.length * 0.1) * 100)}%` }} />
+                </div>
+              </div>
               <h2 key={act} className="journey-title">
                 {ACTS[act].t}
               </h2>
@@ -70,10 +79,10 @@ export default function Journey() {
               </p>
               <div className="journey-dots">
                 {ACTS.map((_, i) => (
-                  <i key={i} className={i === act ? "on" : ""} />
+                  <i key={i} className={i <= act ? "on" : ""} />
                 ))}
               </div>
-              <a className="btn" href={whatsappLink()} target="_blank" rel="noopener" style={{ marginTop: "8px" }}>
+              <a className="btn" href={whatsappLink()} target="_blank" rel="noopener" style={{ marginTop: "6px" }}>
                 Começar minha jornada
               </a>
             </div>

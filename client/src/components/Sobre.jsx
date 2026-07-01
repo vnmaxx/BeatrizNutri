@@ -1,5 +1,43 @@
+import { useEffect, useRef, useState } from "react";
 import Lazy3D from "./Lazy3D.jsx";
 import { site, whatsappLink } from "../config.js";
+
+// Conta de 0 até `end` quando entra na viewport.
+function CountUp({ end, suffix = "", duration = 1400 }) {
+  const ref = useRef(null);
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setVal(Math.round(end * eased));
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [end, duration]);
+  return (
+    <span ref={ref}>
+      {val.toLocaleString("pt-BR")}
+      {suffix}
+    </span>
+  );
+}
 
 export default function Sobre() {
   return (
@@ -28,7 +66,9 @@ export default function Sobre() {
           </p>
           <div className="stats">
             <div>
-              <b>3.000+</b>
+              <b>
+                <CountUp end={3000} suffix="+" />
+              </b>
               <span>atendimentos realizados</span>
             </div>
             <div>
