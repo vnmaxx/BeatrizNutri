@@ -9,9 +9,9 @@ import * as THREE from "three";
 import { P } from "./palette.js";
 
 const C_TERRA = new THREE.Color(P.terra);
-const C_SAGE = new THREE.Color(P.sage);
+const C_END = new THREE.Color("#3a8a5f"); // verde da marca (cor final da forma)
+const C_EMIT = new THREE.Color("#2c6b49"); // brilho verde no final
 const C_BLACK = new THREE.Color("#000000");
-const C_GOLD = new THREE.Color(P.gold);
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
 
 // Nuvem de partículas puxada para dentro da forma conforme `assemble` cresce.
@@ -20,7 +20,7 @@ function Particulas({ stateRef, scale = 1.2, count = 420 }) {
   const matRef = useRef();
 
   const { positions, target, scattered, radBase } = useMemo(() => {
-    const R = 1.28 * scale;
+    const R = 0.9 * scale; // alvo DENTRO da superfície → as partículas são absorvidas
     const positions = new Float32Array(count * 3);
     const target = new Float32Array(count * 3);
     const scattered = new Float32Array(count * 3);
@@ -77,9 +77,12 @@ function Particulas({ stateRef, scale = 1.2, count = 420 }) {
     geo.attributes.position.needsUpdate = true;
 
     if (matRef.current) {
-      // aparecem ao serem puxadas; ao assentar (forma estável) integram-se
-      matRef.current.opacity = Math.min(1, asm * 1.3) * (1 - stab * 0.45) * 0.9;
-      matRef.current.size = (0.045 + (1 - pull) * 0.02) * scale;
+      // aparecem ao serem puxadas e SOMEM ao serem absorvidas pela forma
+      const appear = Math.min(1, asm * 1.6);
+      const merge = clamp01((asm - 0.75) / 0.25);
+      matRef.current.opacity = appear * (1 - merge * 0.92) * 0.95;
+      matRef.current.size = (0.05 + (1 - pull) * 0.03) * scale;
+      void stab;
     }
   });
 
@@ -127,9 +130,9 @@ export default function OrganicForm({ stateRef, scale = 1.2 }) {
     if (mat.current) {
       mat.current.distort = 0.5 * inst + 0.05;
       mat.current.speed = 2.2 * inst + 0.4;
-      mat.current.color.copy(C_TERRA).lerp(C_SAGE, stab);
-      mat.current.emissive.copy(C_BLACK).lerp(C_GOLD, stab * 0.85);
-      mat.current.emissiveIntensity = 0.04 + stab * 0.5;
+      mat.current.color.copy(C_TERRA).lerp(C_END, stab); // terracota → verde da marca
+      mat.current.emissive.copy(C_BLACK).lerp(C_EMIT, stab);
+      mat.current.emissiveIntensity = 0.04 + stab * 0.3;
     }
     if (scan.current) {
       scan.current.visible = scn > 0.03;
