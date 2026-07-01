@@ -1,5 +1,4 @@
 import Icon from "./Icon.jsx";
-import Lazy3D from "./Lazy3D.jsx";
 import { whatsappLink } from "../config.js";
 
 const inclui = [
@@ -21,11 +20,6 @@ export default function Metodo() {
             corpo e construir hábitos que se mantêm depois que o acompanhamento termina.
           </p>
         </div>
-        <Lazy3D
-          className="metodo-scene"
-          load={() => import("../three/MetodoScene.jsx")}
-          fallback={<div className="scene-fallback" />}
-        />
         <div className="metodo-grid">
           {inclui.map((i) => (
             <div className="metodo-card" key={i.titulo}>

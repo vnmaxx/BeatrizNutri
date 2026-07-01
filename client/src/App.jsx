@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
+import Journey from "./components/Journey.jsx";
 import Strip from "./components/Strip.jsx";
 import Dores from "./components/Dores.jsx";
 import Metodo from "./components/Metodo.jsx";
@@ -45,6 +46,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <Journey />
         <Strip />
         <Dores />
         <Metodo />

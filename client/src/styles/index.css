@@ -1446,3 +1446,112 @@ header {
     animation: none !important;
   }
 }
+
+/* ===================== JORNADA (scrollytelling 3D) ===================== */
+.journey {
+  position: relative;
+  height: 400vh; /* 4 etapas de rolagem */
+  background: var(--bg);
+}
+.journey-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.journey-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.journey-canvas .scene-fallback {
+  border-radius: 0;
+  opacity: 1;
+  background: radial-gradient(70% 70% at 60% 40%, rgba(159, 179, 146, 0.12), var(--bg) 70%);
+}
+.journey-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+.journey-overlay-inner {
+  width: 100%;
+}
+.journey-caption {
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.66);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 22px;
+  padding: 30px 30px 28px;
+  box-shadow: 0 24px 70px rgba(40, 80, 55, 0.16);
+  pointer-events: auto;
+}
+.journey-step {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.journey-title {
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  margin-bottom: 12px;
+  animation: journeyIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.journey-desc {
+  color: var(--cinza);
+  font-size: 1.06rem;
+  margin-bottom: 20px;
+  animation: journeyIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+@keyframes journeyIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.journey-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.journey-dots i {
+  width: 26px;
+  height: 5px;
+  border-radius: 4px;
+  background: var(--borda);
+  transition: 0.35s;
+}
+.journey-dots i.on {
+  background: var(--verde);
+  width: 40px;
+}
+@media (max-width: 640px) {
+  .journey-caption {
+    max-width: none;
+    margin: 0 6px;
+    padding: 22px;
+  }
+  .journey-overlay {
+    align-items: flex-end;
+    padding-bottom: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey {
+    height: auto;
+  }
+  .journey-sticky {
+    position: relative;
+    height: auto;
+    padding: 60px 0;
+  }
+  .journey-canvas {
+    display: none;
+  }
+}
